@@ -116,6 +116,7 @@ def repair_Img(img,r=5,flags=Z.repair_NS,mode=0):
     :return: 返回修复后的图片
     """
     hsvvals = Trace.HSV(mode)
+    tr=Trace.getMask()
     if hsvvals == 0:
         hmin, smin, vmin, hmax, smax, vmax = map(int, input().split(','))
         hsvval=[[hmin, smin, vmin],[hmax, smax, vmax]]
