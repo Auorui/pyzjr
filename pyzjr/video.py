@@ -16,7 +16,7 @@ class VideoCap():
         self.cap.set(4, h)
         self.cap.set(10, l)
     def read(self):
-        img = self.cap.read()
+        ret, img = self.cap.read()
         return img
     def release(self):
         self.cap.release()
