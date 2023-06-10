@@ -3,8 +3,6 @@ import requests
 import cv2
 import os, shutil
 from matplotlib import pyplot as plt
-import pyzjr.Color.TrackBar as Trace
-import pyzjr.Z as Z
 
 def download_file(url):
     """
@@ -105,25 +103,3 @@ def save_images(images, folder_path):
     for i, img in enumerate(images):
         img_path = os.path.join(folder_path, f"image_{i}.jpg")
         cv2.imwrite(img_path, img)
-
-def repair_Img(img,r=5,flags=Z.repair_NS,mode=0):
-    """
-    * 用于修复图像
-    :param img: 输入图像
-    :param r: 修复半径，即掩膜的像素周围需要参考的区域半径
-    :param flags: 修复算法的标志，有Z.repair_NS、Z.repair_TELEA，默认为Z.repair_NS，
-    :param mode: 是否采用HSV例模式，默认为0，自定义模式，可通过Color下的TrackBar文件中获得
-    :return: 返回修复后的图片
-    """
-    hsvvals = Trace.HSV(mode)
-    tr=Trace.getMask()
-    if hsvvals == 0:
-        hmin, smin, vmin, hmax, smax, vmax = map(int, input().split(','))
-        hsvval=[[hmin, smin, vmin],[hmax, smax, vmax]]
-        imgResult, mask, imgHSV = tr.MaskZone(img, hsvval)
-        dst = cv2.inpaint(img, mask, r, flags)
-        return dst
-    else:
-        imgResult, mask, imgHSV = tr.MaskZone(img, hsvvals)
-        dst = cv2.inpaint(img, mask, r, flags)
-        return dst
