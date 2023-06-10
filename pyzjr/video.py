@@ -6,7 +6,7 @@ import time
 import cv2
 import imageio
 
-class VideoCap():
+class VideoCap:
     """
     自定义的视频读取类
     """
