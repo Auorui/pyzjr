@@ -16,8 +16,8 @@ class VideoCap():
         self.cap.set(4, h)
         self.cap.set(10, l)
     def read(self):
-        _, img = self.cap.read()
-        return _, img
+        img = self.cap.read()
+        return img
     def release(self):
         self.cap.release()
 
@@ -90,7 +90,7 @@ def mainWebcam():
     Vcap = VideoCap()
     Vcap.CapInit(mode=0, w=480, h=480)
     while True:
-        _, img = Vcap.read()
+        img = Vcap.read()
         fps, img = fpsReader.update(img)
         cv2.imshow("Image", img)
         k=cv2.waitKey(1)
