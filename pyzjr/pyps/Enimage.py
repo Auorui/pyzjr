@@ -25,14 +25,16 @@
     - 单尺度 ： SSR
     - 多尺度 : MSR
     - 多尺度自适应增益 : MSRCR
--图像修补
-
+-其他
+    - 图像修补 ： repair_Img
 """
 import numpy as np
 import cv2
 import pyzjr.utils as zjr
 from pyzjr.utils import empty
 import random
+import pyzjr.Color.TrackBar as Trace
+import pyzjr.Z as Z
 
 class Filter():
     def median_filtering(self, img,ksize=3):
@@ -326,10 +328,6 @@ class Random_Enhance():
             imglist.append(restored_image)
         return imglist
 
-import cv2
-from pyzjr.utils import stackImages
-import numpy as np
-
 class Retinex():
     def SSR(self, img, sigma):
         """
@@ -417,6 +415,28 @@ class Retinex():
         img_msrcr = np.exp(result+img_light) - 1
         img_msrcr = np.uint8(cv2.normalize(img_msrcr, None, 0, 255, cv2.NORM_MINMAX))
         return img_msrcr
+    
+def repair_Img(img,r=5,flags=Z.repair_NS,mode=0):
+    """
+    * 用于修复图像
+    :param img: 输入图像
+    :param r: 修复半径，即掩膜的像素周围需要参考的区域半径
+    :param flags: 修复算法的标志，有Z.repair_NS、Z.repair_TELEA，默认为Z.repair_NS，
+    :param mode: 是否采用HSV例模式，默认为0，自定义模式，可通过Color下的TrackBar文件中获得
+    :return: 返回修复后的图片
+    """
+    hsvvals = Trace.HSV(mode)
+    tr=Trace.getMask()
+    if hsvvals == 0:
+        hmin, smin, vmin, hmax, smax, vmax = map(int, input().split(','))
+        hsvval=[[hmin, smin, vmin],[hmax, smax, vmax]]
+        imgResult, mask, imgHSV = tr.MaskZone(img, hsvval)
+        dst = cv2.inpaint(img, mask, r, flags)
+        return dst
+    else:
+        imgResult, mask, imgHSV = tr.MaskZone(img, hsvvals)
+        dst = cv2.inpaint(img, mask, r, flags)
+        return dst
 
 if __name__=="__main__":
     path= r'../resources/AI2.png'
@@ -425,6 +445,6 @@ if __name__=="__main__":
     imgSSR=Re.SSR(img,7)
     imgMSR=Re.MSR(img, [1, 3, 5])
     imgMSRCR=Re.MSRCR(img,[1,3,5],12)
-    imgStack=stackImages(0.6,([img,imgSSR],[imgMSR,imgMSRCR]))
+    imgStack=zjr.stackImages(0.6,([img,imgSSR],[imgMSR,imgMSRCR]))
     cv2.imshow("retinex",imgStack)
     cv2.waitKey(0)
