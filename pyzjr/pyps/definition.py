@@ -115,7 +115,7 @@ class Fuzzy_image():
             c.sort()
         return c
 
-    def getThr(self,pathTest = "./test",pathStd = "./Standards"):
+    def getThr(self,pathTest = "./ces/test",pathStd = "./ces/Standards"):
         """
         :param pathTest:测试的数据集文件夹位置
         :param pathStd: 标准图的数据文件夹位置
