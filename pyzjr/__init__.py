@@ -20,7 +20,7 @@ __version__ = "0.0.1"
 
 import cv2
 
-from pyzjr.video import FPS
+from video import VideoCap,FPS,Mp4toGif
 from utils import stackImages,addnoisy,getContours,empty
 
 repair_TELEA=cv2.INPAINT_TELEA
