@@ -1,23 +1,32 @@
 """
--图形处理相关
--滤波算法
+- author:Auorui(夏天是冰红茶)
+- creation time:2023.5.11
+- 图形处理相关
+- 滤波算法
     类Filter()
-    -中值滤波 ： median_filtering
-    -双边滤波 ： Bilateral_filtering
-    -均值滤波 ： Arerage_Filtering
-    -高斯滤波 ： Gaussian_Filtering
+    - 中值滤波 ： median_filtering
+    - 双边滤波 ： Bilateral_filtering
+    - 均值滤波 ： Arerage_Filtering
+    - 高斯滤波 ： Gaussian_Filtering
 -增广算法
     类Enhance()
-    -旋转 ： Rotated_image
-    -亮度调整 ： Adjusted_image
-    -裁剪 ： Cut_image
-    -拼接 ： Stitcher_image
+    - 旋转 ： Rotated_image
+    - 亮度调整 ： Adjusted_image
+    - 裁剪 ： Cut_image
+    - 拼接 ： Stitcher_image
     类Random_Enhance()
-    -垂直或水平翻转 ： horizontal_flip
-    -随机参数 ： random_generate
-    -随机翻转 ： random_flip_batch
-    -随机明暗调整 ： random_brightness_batch
-    -随机裁剪 : random_Cropping_batch
+    - 垂直或水平翻转 ： horizontal_flip
+    - 随机参数 ： random_generate
+    - 随机翻转 ： random_flip_batch
+    - 随机明暗调整 ： random_brightness_batch
+    - 随机裁剪 : random_Cropping_batch
+-增强算法
+    类Retinex()
+    - 单尺度 ： SSR
+    - 多尺度 : MSR
+    - 多尺度自适应增益 : MSRCR
+-图像修补
+
 """
 import numpy as np
 import cv2
@@ -317,3 +326,105 @@ class Random_Enhance():
             imglist.append(restored_image)
         return imglist
 
+import cv2
+from pyzjr.utils import stackImages
+import numpy as np
+
+class Retinex():
+    def SSR(self, img, sigma):
+        """
+        将输入图像转换为了对数空间。/255将像素值归一化到0到1之间，np.log1p取对数并加1是为了避免出现对数运算中分母为0的情况。二维离散傅里叶变换将
+        图像从空间域变换到频率域，可以提取出图像中的频率信息。G_recs是用于计算高斯核的半径，result用于最后三通道的叠加。然后循环用于计算加权后的
+        频率域图像，再逆二维离散傅里叶变换，得到反射图像，对反射图像进行指数变换，得到最终的输出图像。
+        :param img: 输入图像
+        :param sigma: 高斯分布的标准差
+        :return:
+        """
+        img_log = np.log1p(np.array(img, dtype="float") / 255)
+        img_fft = np.fft.fft2(img_log)
+        G_recs = sigma // 2 + 1
+        result = np.zeros_like(img_fft)
+        rows, cols, deep = img_fft.shape
+        for z in range(deep):
+            for i in range(rows):
+                for j in range(cols):
+                    for k in range(1, G_recs):
+                        G = np.exp(-((np.log(k) - np.log(sigma)) ** 2) / (2 * np.log(2) ** 2))
+                        #计算高斯滤波器的权值，其中sigma是高斯分布的标准差，k是高斯滤波器的半径，G是高斯滤波器在该点的权值。
+                        result[i, j] += G * img_fft[i, j]
+        img_ssr = np.real(np.fft.ifft2(result))
+        img_ssr = np.exp(img_ssr) - 1
+        img_ssr = np.uint8(cv2.normalize(img_ssr, None, 0, 255, cv2.NORM_MINMAX))
+        #将像素值归一化到0到255之间，并转换为无符号8位整型
+        return img_ssr
+
+
+
+    def MSR(self, img, scales):
+        """
+        MSR算法在图像增强中与SSR不同的是，它不需要进行频域变换，它主要是基于图像在多个尺度下的平滑处理和差分处理来提取图像的局部对比度信息和全
+        局对比度信息，从而实现对图像的增强。
+        在 MSR 算法中，先对图像进行对数变换得到对数图像，然后在不同的尺度下，使用高斯滤波对图像进行平滑处理，得到不同尺度下的平滑图像。接着，通
+        过将对数图像和不同尺度下的平滑图像进行差分，得到多个尺度下的细节图像。最后，将这些细节图像加权融合，输出最终的增强图像。
+
+        :param img:
+        :param scales: 取值大概在1-10之间
+        :return:
+        """
+        img_log = np.log1p(np.array(img, dtype="float") / 255)
+        result = np.zeros_like(img_log)
+        img_light = np.zeros_like(img_log)
+        r, c, deep = img_log.shape
+        for z in range(deep):
+            for scale in scales:
+                kernel_size = scale * 4 + 1
+                # 高斯滤波器的大小，经验公式kernel_size = scale * 4 + cat
+                sigma = scale
+                img_smooth = cv2.GaussianBlur(img_log[:, :, z], (kernel_size, kernel_size), sigma)
+                img_detail = img_log[:, :, z] - img_smooth
+                result[:, :, z] += cv2.resize(img_detail, (c, r))
+                img_light[:, :, z] += cv2.resize(img_smooth, (c, r))
+        img_msr = np.exp(result+img_light) - 1
+        img_msr = np.uint8(cv2.normalize(img_msr, None, 0, 255, cv2.NORM_MINMAX))
+        return img_msr
+
+
+    def MSRCR(self, img, scales, k):
+        """
+
+        :param img:
+        :param scales:取值大概在1-10之间
+        :param k: k的取值范围在10~20之间比较合适。当k取值较小时，图像的细节增强效果比较明显，但会出现较强的噪点，当k取值较大时，图像的细节
+                    增强效果不明显，但噪点会减少。
+        :return:
+        """
+        img_log = np.log1p(np.array(img, dtype="float") / 255)
+        result = np.zeros_like(img_log)
+        img_light = np.zeros_like(img_log)
+        r, c, deep = img_log.shape
+        for z in range(deep):
+            for scale in scales:
+                kernel_size = scale * 4 + 1
+                # 高斯滤波器的大小，经验公式kernel_size = scale * 4 + cat
+                sigma = scale
+                G_ratio=sigma**2/(sigma**2+k)
+                img_smooth = cv2.GaussianBlur(img_log[:, :, z], (kernel_size, kernel_size), sigma)
+                img_detail = img_log[:, :, z] - img_smooth
+                result[:, :, z] += cv2.resize(img_detail, (c, r))
+                result[:, :, z]=result[:, :, z]*G_ratio
+                img_light[:, :, z] += cv2.resize(img_smooth, (c, r))
+
+        img_msrcr = np.exp(result+img_light) - 1
+        img_msrcr = np.uint8(cv2.normalize(img_msrcr, None, 0, 255, cv2.NORM_MINMAX))
+        return img_msrcr
+
+if __name__=="__main__":
+    path= r'../resources/AI2.png'
+    img=cv2.imread(path)
+    Re=Retinex()
+    imgSSR=Re.SSR(img,7)
+    imgMSR=Re.MSR(img, [1, 3, 5])
+    imgMSRCR=Re.MSRCR(img,[1,3,5],12)
+    imgStack=stackImages(0.6,([img,imgSSR],[imgMSR,imgMSRCR]))
+    cv2.imshow("retinex",imgStack)
+    cv2.waitKey(0)
