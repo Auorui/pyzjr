@@ -34,7 +34,7 @@ import cv2
 import pyzjr.utils as zjr
 from pyzjr.utils import empty
 import random
-import TrackBar as Trace
+import pyzjr.TrackBar as Trace
 import pyzjr.Z as Z
 
 class Filter():
