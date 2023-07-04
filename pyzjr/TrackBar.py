@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from ColorModule import ColorFinder
+from pyzjr.ColorModule import ColorFinder
 import pyzjr.utils as zjr
 import logging
 
