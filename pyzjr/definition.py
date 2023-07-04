@@ -5,7 +5,7 @@
 """
 import cv2
 import math
-from PIC import getPhotopath
+from pyzjr.PIC import getPhotopath
 import numpy as np
 import pyzjr.Z as Z
 
