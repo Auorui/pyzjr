@@ -24,6 +24,6 @@ https://github.com/Auorui/pyzjr (I want stars ⭐ hhh)
 
 ## Upload of Library
 
-* `python3 setup.py sdist`
+* `python setup.py sdist`
 
 * `twine upload dist/*`
