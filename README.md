@@ -16,6 +16,8 @@ https://github.com/Auorui/pyzjr (I want stars ⭐ hhh)
 
 ## Update log
 
+`0.0.9` Added mini module, can perform bucket operations
+
 `0.0.8` Can be used normally, added zmath file
 
 `0.0.7` fix bug
