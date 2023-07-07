@@ -20,7 +20,7 @@ with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
     long_description = "\n" + fh.read()
 
 # you need to change all these
-VERSION = '0.0.7'
+VERSION = '0.0.9'
 DESCRIPTION = ' a computer vision library that supports both Win and Mac '
 LONG_DESCRIPTION = 'pyzjr is a computer vision library that supports both Win and Mac'
 
