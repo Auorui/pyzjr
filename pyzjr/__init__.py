@@ -15,7 +15,7 @@ from pyzjr import pysift as sift  # Using SIFT matching algorithm
 from pyzjr import Color as color
 """
 
-__version__ = "0.0.7"
+__version__ = "0.0.9"
 
 import cv2
 from pyzjr.PIC import download_file,getPhotopath,Pic_rename,read_resize_image,\
