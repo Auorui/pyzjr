@@ -1,0 +1,9 @@
+requests
+tqdm
+matplotlib
+scikit-image
+torch
+opencv-python
+tqdm
+torchvision
+torchsummary

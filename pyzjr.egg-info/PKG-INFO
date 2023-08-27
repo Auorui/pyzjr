@@ -1,0 +1,58 @@
+Metadata-Version: 2.1
+Name: pyzjr
+Version: 1.1.2
+Summary:  A computer vision library that supports Win, packaged with patches for visual libraries such as                 Opencv, matplotlib, and image. In the future, Pytorch will also be supported, all of which are personal (Auorui)                 engineering code experience. 
+Home-page: https://github.com/Auorui/pyzjr
+Author: Auorui
+Author-email: zjricetea@gmail.com
+License: MIT
+Description: 
+        # pyzjr
+        
+        <h1 align="center">
+        <img src="https://github.com/Auorui/AI-Learning-Materials/blob/main/webbg/%E5%86%B0%E7%BA%A2%E8%8C%B6.png" width="300">
+        </h1><br>
+        
+        ![Static Badge](https://img.shields.io/badge/GitHub-Auorui-bgr?link=https%3A%2F%2Fgithub.com%2FAuorui)
+        ![Static Badge](https://img.shields.io/badge/Download-pyzjr-rgb?color=%233ABBEB&link=https%3A%2F%2Fpypi.org%2Fproject%2Fpyzjr)
+        
+        This is a package that has been patched for excellent third-party libraries such as opencv and pytorch.
+        
+        All useful functional functions written by individuals
+        
+        I will also integrate algorithms I have previously written
+        
+        ## Installation
+        
+        https://pypi.org/project/pyzjr/
+        
+        https://github.com/Auorui/pyzjr (I want stars ⭐ hhh)
+        
+        ## Update log
+        `1.1.2` Added basic open source feature extraction frameworks VGG, Resnet, Densenet.
+                In addition, the advanced visual module only adds gesture recognition and requires 
+                downloading the mediapipe. However, due to its complexity, there is no dependency added to pyzjr. 
+                If you want to use it, you need to download it separately
+        
+        `1.1.0` This update redefines the color module. Added some aspects of deep learning, such as vgg.
+        
+        `1.0.0` Official upload of version 1.0.0
+        
+        `0.0.19` Modified the problem of Escape character in the path read by the getPhotopath function
+        
+        `0.0.17——0.018` Added Showimage module and added torch framework. It is recommended to install it in a virtual environment of deep learning framework.
+        
+        `0.0.12——0.016` Modifying bugs and adding functions to the PIC.py file.
+        
+        ## Upload of Library
+        
+        * `python setup.py sdist`
+        
+        * `twine upload dist/*`
+Keywords: python,computer vision,pyzjr,windows
+Platform: UNKNOWN
+Classifier: Development Status :: 1 - Planning
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: Microsoft :: Windows
+Description-Content-Type: text/markdown
