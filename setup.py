@@ -8,7 +8,6 @@
 - Email: zjricetea@gmail.com
 - Note: Currently still being updated, please refer to the latest version for any changes that may occur
 """
-
 import codecs
 import os
 from setuptools import setup, find_packages
@@ -19,10 +18,12 @@ here = os.path.abspath(os.path.dirname(__file__))
 with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
     long_description = "\n" + fh.read()
 
-# you need to change all these
-VERSION = '0.0.9'
-DESCRIPTION = ' a computer vision library that supports both Win and Mac '
-LONG_DESCRIPTION = 'pyzjr is a computer vision library that supports both Win and Mac'
+
+VERSION = '1.1.2'
+DESCRIPTION = ' A computer vision library that supports Win, packaged with patches for visual libraries such as \
+                Opencv, matplotlib, and image. In the future, Pytorch will also be supported, all of which are personal (Auorui) \
+                engineering code experience. '
+LONG_DESCRIPTION = 'pyzjr is a computer vision library that supports Win'
 
 setup(
     name="pyzjr",
@@ -35,27 +36,22 @@ setup(
     long_description=long_description,
     packages=find_packages(),
     license='MIT',
-    install_requires=[],
-    keywords=['python', 'computer vision', 'pyzjr','windows','mac','linux'],
+    install_requires=[
+        'requests',
+        'tqdm',
+        'matplotlib',
+        'scikit-image',
+        'torch',
+        'opencv-python',
+        'tqdm',
+        'torchvision',
+        'torchsummary'
+    ],
+    keywords=['python', 'computer vision', 'pyzjr','windows'],
     classifiers=[
         "Development Status :: 1 - Planning",
         "Intended Audience :: Developers",
         "Programming Language :: Python :: 3",
-        "Operating System :: Unix",
-        "Operating System :: MacOS :: MacOS X",
         "Operating System :: Microsoft :: Windows",
     ]
 )
-
-
-
-
-
-
-
-
-
-
-
-
-
