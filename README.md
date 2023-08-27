@@ -20,19 +20,20 @@ https://pypi.org/project/pyzjr/
 https://github.com/Auorui/pyzjr (I want stars ⭐ hhh)
 
 ## Update log
-`0.0.12` Fixed reference to getPhotopath.
+`1.1.2` Added basic open source feature extraction frameworks VGG, Resnet, Densenet.
+        In addition, the advanced visual module only adds gesture recognition and requires 
+        downloading the mediapipe. However, due to its complexity, there is no dependency added to pyzjr. 
+        If you want to use it, you need to download it separately
 
-`0.0.11` Created a new FM.py file and moved some functions of PIC over.
+`1.1.0` This update redefines the color module. Added some aspects of deep learning, such as vgg.
 
-`0.0.10` Modified the position of the repair_Img function to PIC, added interactive annotations, which can be used for perspective transformation.
+`1.0.0` Official upload of version 1.0.0
 
-`0.0.9` Added mini module, can perform bucket operations.
+`0.0.19` Modified the problem of Escape character in the path read by the getPhotopath function
 
-`0.0.8` Can be used normally, added zmath file.
+`0.0.17——0.018` Added Showimage module and added torch framework. It is recommended to install it in a virtual environment of deep learning framework.
 
-`0.0.7` fix bug.
-
-`0.0.1` first release.
+`0.0.12——0.016` Modifying bugs and adding functions to the PIC.py file.
 
 ## Upload of Library
 
