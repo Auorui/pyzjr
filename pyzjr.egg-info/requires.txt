@@ -1,0 +1,13 @@
+requests
+tqdm
+matplotlib
+imageio
+scikit-image
+torch
+scikit-learn
+pywin32
+opencv-python
+pillow
+tqdm
+torchvision
+torchsummary
