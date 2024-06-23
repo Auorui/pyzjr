@@ -59,7 +59,6 @@ def load_device_on_model(model, i=0):
 CPU = cpu = Central_Processing_Unit
 GPU = gpu = Graphics_Processing_Unit
 
-if __name__=="__main__":
+if __name__ == "__main__":
     device = load_owned_device()
     print(device)
-

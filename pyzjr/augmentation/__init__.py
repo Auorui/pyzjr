@@ -1,7 +1,7 @@
 
 from .augments import (
-    base_crop1,
-    base_crop2,
+    crop_image_by_points,
+    crop_image_by_dimensions,
     center_crop,
     five_crop,
     Stitcher_image,
@@ -32,7 +32,11 @@ from .blur import (
     medianblur,
     gaussianblur,
     bilateralblur,
-    Filter,
+    medianfilter,
+    meanfilter,
+    gaussian_kernel,
+    gaussianfilter,
+    bilateralfilter
 )
 
 from .PIC import (
@@ -60,6 +64,8 @@ from .mask_ops import (
     chamfer,
     fast_marching,
     addnoisy,
+    addfog,
+    addfog_channels,
     inpaint_defect,
     cvt8png,
     cvtMask,

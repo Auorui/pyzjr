@@ -16,27 +16,23 @@ def SumExceptBatch(x, num_batch_dims=1):
     return torch.sum(x, dim=reduce_dims)
 
 
-def hwc_and_chw(img):
+def hwc2chw(img):
     """
-    将HWC与CHW格式的转换。
+    从 HWC  到 CHW 格式的转换。
     Example:
         hwc_image_numpy = np.random.rand(256, 256, 3)
-        chw_image_numpy = hwc_and_chw(hwc_image_numpy)
-        print("Original HWC shape:", hwc_image_numpy.shape)
-        print("Converted CHW shape:", chw_image_numpy.shape)
+        chw_image_numpy = hwc2chw(hwc_image_numpy)
         hwc_image_tensor = torch.rand(256, 256, 3)
-        chw_image_tensor = hwc_and_chw(hwc_image_tensor)
-        print("Original HWC shape:", hwc_image_tensor.shape)
-        print("Converted CHW shape:", chw_image_tensor.shape)
+        chw_image_tensor = hwc2chw(hwc_image_tensor)
     """
     if is_numpy(img):
         if len(img.shape) == 3:
-            chwimg = np.rollaxis(img, 2)
-            return chwimg
+            chw = np.transpose(img, axes=[2, 0, 1])
+            return chw
     elif is_tensor(img):
         if len(img.shape) == 3:
-            chwimg = img.permute(2, 0, 1).contiguous()
-            return chwimg
+            chw = img.permute(2, 0, 1).contiguous()
+            return chw
 
 def to_bchw(tensor):
     """
@@ -79,7 +75,7 @@ def image_to_tensor(image, keepdim=True):
             image_to_tensor(img, keepdim=False).shape
             >>> torch.Size([1, 3, 4, 4])
     """
-    if is_numpy(img):
+    if is_numpy(image):
         if len(image.shape) > 4 or len(image.shape) < 2:
             raise ValueError("Input size must be a two, three or four dimensional array")
     input_shape = image.shape
@@ -190,9 +186,11 @@ def label2tensor(mask, num_classes, sigmoid, totensor=False):
     return torch.from_numpy(mask).long() if totensor else mask
 
 if __name__=="__main__":
-    img = np.ones((3, 3))
-    print(image_to_tensor(img).shape)
-    img = np.ones((4, 4, 1))
-    print(image_to_tensor(img).shape)
-    img = np.ones((4, 4, 3))
-    print(image_to_tensor(img, keepdim=False).shape)
+    hwc_image_numpy = np.random.rand(256, 256, 3)
+    chw_image_numpy = hwc2chw(hwc_image_numpy)
+    print("Original HWC shape:", hwc_image_numpy.shape)
+    print("Converted CHW shape:", chw_image_numpy.shape)
+    hwc_image_tensor = torch.rand(256, 256, 3)
+    chw_image_tensor = hwc2chw(hwc_image_tensor)
+    print("Original HWC shape:", hwc_image_tensor.shape)
+    print("Converted CHW shape:", chw_image_tensor.shape)

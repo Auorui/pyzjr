@@ -134,6 +134,52 @@ def addnoisy(image, n=10000):
             result[x, y] = 255
     return result
 
+def addfog(image, beta=0.05, brightness=0.5, use_efficient=True):
+    """
+    基于大气散射模型对输入的图像添加雾霾效果的高效实现。
+
+    Args:
+        image (numpy.ndarray): 输入的图像,范围在0-255.
+        beta (float, optional): 控制雾霾效果的参数. beta值越大, 雾霾效果越明显. 默认为0.05.
+        brightness (float, optional): 雾霾的亮度值. 该值越大, 图像整体亮度越高. 默认为0.5.
+
+    Returns:
+        numpy.ndarray: 添加雾霾效果后的图像，数据类型为uint8，范围在0-255。
+    """
+    img_f = image.astype(np.float32) / 255.0
+    row, col, chs = image.shape
+    size = np.sqrt(max(row, col))  # Atomization size
+    center = (row // 2, col // 2)  # Atomization center
+    if use_efficient:
+        y, x = np.ogrid[:row, :col]
+        dist = np.sqrt((x - center[1])**2 + (y - center[0])**2)
+        d = -0.04 * dist + size
+        td = np.exp(-beta * d)
+        img_f = img_f * td[..., np.newaxis] + brightness * (1 - td[..., np.newaxis])
+    else:
+        for j in range(row):
+            for l in range(col):
+                d = -0.04 * np.sqrt((j - center[0]) ** 2 + (l - center[1]) ** 2) + size
+                td = np.exp(-beta * d)
+                img_f[j][l][:] = img_f[j][l][:] * td + brightness * (1 - td)
+    img_f = np.clip(img_f * 255, 0, 255).astype(np.uint8)
+    return img_f
+
+def addfog_channels(image, fog_intensity=0.5, fog_color_intensity=255):
+    """
+    对图像 RGB 通道应用雾效。
+
+    参数:
+        image: 输入图像（numpy数组）。
+        fog_intensity: 雾的强度（0到1）。
+        fog_color_intensity: 雾的颜色强度（0到255）.不宜过小, 建议大于180
+    """
+    fog_intensity = np.clip(fog_intensity, 0, 1)
+    fog_layer = np.ones_like(image) * fog_color_intensity
+    fogged_image = cv2.addWeighted(image, 1 - fog_intensity, fog_layer, fog_intensity, 0)
+
+    return fogged_image
+
 def inpaint_defect(image, mask, radius=10, flags=1):
     """
     Inpaint defect image

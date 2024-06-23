@@ -1,1 +1,1 @@
-from .trainer_segment import SegmentationTrainEpoch
+from .segment_trainer import SegmentationTrainEpoch

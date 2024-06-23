@@ -27,3 +27,4 @@ from pyzjr.measure import *
 
 from pyzjr.nn import *
 from pyzjr.Models import *
+from pyzjr.torch3d import *

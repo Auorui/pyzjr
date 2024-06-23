@@ -30,7 +30,7 @@ def save_model_to_pth_best(model, save_dir, val_loss, epoch, save_period=None):
         best_val_loss = val_loss
         best_model_path = os.path.join(save_dir, "best_model.pth")
         _torch_save(model.state_dict(), best_model_path)
-        print(f"Best model saved at epoch —— {epoch}")
+        print(f"Best model saved at epoch —— {epoch} loss —— {val_loss}")
         print(f'Save best model to {best_model_path}')
 
 
@@ -47,10 +47,10 @@ def save_model_to_pth_best_metrics(model, save_dir, metric, epoch):
     os.makedirs(save_dir, exist_ok=True)
     if epoch <= 1 or metric > init_metrics:
         init_metrics = metric
-        model_path = os.path.join(save_dir, f'best_model_epoch_{epoch}_metric_{metric}.pth')
+        model_path = os.path.join(save_dir, f'best_model.pth')
         _torch_save(model.state_dict(), model_path)
-
-        print(f"Saved best model with metric {metric} at epoch {epoch} to {model_path}")
+        print(f"Best model saved at epoch —— {epoch}, metric —— {init_metrics}")
+        print(f'Save best model to {model_path}')
 
 
 def save_model_to_pth_simplify(model, save_dir, epoch, save_period=10):

@@ -48,6 +48,8 @@ def display(winname, imgArray, scale=1.):
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
+    return image
+
 def imreader(filename, is_gray=False, flip=None, to_rgb=False):
     """
     :param filename: Path to the image file.

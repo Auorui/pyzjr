@@ -8,7 +8,7 @@ IMAGE_EXTENSIONS_SET = set(IMAGE_EXTENSIONS)
 def getPhotopath(paths, cd=False, debug=False):
     """
     :param paths: 文件夹路径
-    :param cd: 添加当前运行的路径名,这是使用了相对路径才能用的
+    :param cd: 添加当前运行的路径名, 这是使用了相对路径才能用的
     :param debug: 开启打印文件名错误的名字
     :return: 包含图片路径的列表
     """
@@ -18,14 +18,13 @@ def getPhotopath(paths, cd=False, debug=False):
     for i in file_list:
         if debug:
             if i[0] in ['n', 't', 'r', 'b', 'f'] or i[0].isdigit():
-                print(f"[pyzjr]: File name:Error occurred at the beginning of {i}!")
+                print(f"getPhotopath: File name error occurred at the beginning of {i}!")
         newph = os.path.join(paths, i).replace("\\", "/")
         allfile.append(newph)
         _, file_ext = os.path.splitext(newph)
         if file_ext[1:] in IMAGE_EXTENSIONS:
             imgfile.append(newph)
     if cd:
-        # 使用了相对路径, 使用这个补全
         cdd = getcwd()
         imgfile = [os.path.join(cdd, file).replace("\\", "/") for file in imgfile]
         allfile = [os.path.join(cdd, file).replace("\\", "/") for file in allfile]
@@ -40,7 +39,6 @@ def SearchFilePath(filedir, format='png'):
             if str(filespath).endswith(format):
                 search_file_path.append(os.path.join(root, filespath))
     return search_file_path
-
 
 def split_path2list(path_str):
     """

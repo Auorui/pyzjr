@@ -26,7 +26,9 @@ from .general import (
     is_directory_not_empty,
     is_path_exists,
     is_linux,
-    is_windows
+    is_windows,
+    is_odd,
+    is_even
 )
 
 from ._utils import (
@@ -47,11 +49,10 @@ from .helpers import (
     to_3tuple,
     to_4tuple,
     to_ntuple,
-    convert_to_tuple
 )
 
 from ._tensor import (
-    hwc_and_chw,
+    hwc2chw,
     to_bchw,
     image_to_tensor,
     imagelist_to_tensor,

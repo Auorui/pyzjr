@@ -3,6 +3,7 @@ import os
 import time
 import imageio
 import numpy as np
+import sys
 
 __all__ = [
             "VideoCap",
@@ -44,7 +45,7 @@ class VideoCap():
     def show(self,
              winname: str,
              src,
-             base_name: str = './camera/result.png',
+             base_name: str = './result.png',
              end_k=27,
              save_k=ord('s'),
              delay_t=1,
@@ -54,18 +55,19 @@ class VideoCap():
         Window display. Press 's' to save, 'Esc' to end
         """
         image_path, ext = os.path.splitext(base_name)
+        os.makedirs(os.path.dirname(base_name), exist_ok=True)
         if src is not None:
             cv2.imshow(winname, src)
             k = cv2.waitKey(delay_t) & 0xFF
             if k == end_k:
-                return True
+                self.free()
+                sys.exit(0)
             elif k == save_k:
                 self.start_number += 1
                 file_number = str(self.start_number).zfill(extend_num)
                 file_path = f"{image_path}_{file_number}{ext}"
                 print(f"{self.start_number}  Image saved to {file_path}")
                 cv2.imwrite(file_path, src)
-        return False
 
 class FPS:
     def __init__(self):
@@ -145,6 +147,4 @@ if __name__ == "__main__":
     while True:
         img = Vcap.read()
         fps, img = fpsReader.update(img)
-        if Vcap.show("ss", img):
-            break
-    Vcap.free()
+        Vcap.show("ss", img)

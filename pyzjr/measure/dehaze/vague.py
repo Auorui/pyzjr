@@ -1,5 +1,4 @@
 import cv2
-
 import pyzjr.Z as Z
 from pyzjr.data.file import getPhotopath
 from pyzjr.measure.dehaze.eval_definition import Laplacian, Gradientmetric

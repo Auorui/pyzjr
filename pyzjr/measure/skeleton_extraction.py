@@ -10,7 +10,6 @@ from skimage.morphology import skeletonize, dilation, disk
 from skimage import io, morphology
 from pyzjr.augmentation.mask_ops import BinaryImg, medial_axis_mask
 
-
 def skeletoncv(single_pic_path):
     image = cv2.imread(single_pic_path)
     binary = BinaryImg(image)

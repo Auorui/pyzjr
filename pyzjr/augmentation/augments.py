@@ -1,5 +1,5 @@
 """
-这一部分主要针对于opencv格式的,一般这部分用于传统图像的增强
+这一部分主要针对于opencv格式的, 一般这部分用于传统图像的增强
 """
 import numpy as np
 import cv2
@@ -7,7 +7,7 @@ from math import ceil
 import random
 from pyzjr.core.error import _check_parameter_is_tuple_2, _check_parameter_is_tuple_and_list_2
 
-__all__ = ["base_crop1", "base_crop2", "center_crop", "five_crop", "Stitcher_image",\
+__all__ = ["crop_image_by_points", "crop_image_by_dimensions", "center_crop", "five_crop", "Stitcher_image",\
 
            "Centerzoom", "flip", "horizontal_flip", "vertical_flip", "resize", "adjust_brightness_cv2", "adjust_brightness_numpy",\
 
@@ -17,8 +17,18 @@ __all__ = ["base_crop1", "base_crop2", "center_crop", "five_crop", "Stitcher_ima
 
            "Retinex"]
 
-def base_crop1(img, x_min, y_min, x_max, y_max):
-    height, width = img.shape[:2]
+def crop_image_by_points(image, StartPoint, EndPoint):
+    """
+    根据起始点和结束点裁剪图像
+    :param image: 要裁剪的图像
+    :param StartPoint: 裁剪区域的左上角坐标
+    :param EndPoint: 裁剪区域的右下角坐标
+    :return: 被裁剪的图像
+    """
+    height, width = image.shape[:2]
+    x_min, y_min = StartPoint
+    x_max, y_max = EndPoint
+
     assert x_max > x_min, "Maximum value of cropping x_max cannot be less than the minimum value x_min"
     assert y_max > y_min, "Maximum value of cropping y_max cannot be less than the minimum value y_min"
     assert x_min >= 0, "x_min cannot be less than 0"
@@ -26,13 +36,22 @@ def base_crop1(img, x_min, y_min, x_max, y_max):
     assert y_min >= 0, "y_min cannot be less than 0"
     assert y_max <= height, "y_max cannot be greater than the image height"
 
-    return img[y_min:y_max, x_min:x_max]
+    return image[y_min:y_max, x_min:x_max]
 
-def base_crop2(img, x_start, y_start, width, height):
+def crop_image_by_dimensions(image, StartPoint, width, height):
+    """
+    根据起始点和指定的宽度、高度裁剪图像
+    :param image: 要裁剪的图像
+    :param StartPoint: 裁剪区域的左上角坐标
+    :param width: 裁剪区域的宽度
+    :param height: 裁剪区域的高度
+    :return: 被裁剪的图像
+    """
+    x_start, y_start = StartPoint
     assert width > 0 and height > 0, "Width and height of cropping area must be greater than 0"
     assert x_start >= 0 and y_start >= 0, "x_min and y_min cannot be less than 0"
 
-    return img[y_start:y_start+height, x_start:x_start+width]
+    return image[y_start:y_start+height, x_start:x_start+width]
 
 def center_crop(image, target_size):
     """
@@ -49,12 +68,12 @@ def center_crop(image, target_size):
     crop_width, crop_height = target_size
 
     if crop_width > w or crop_height > h:
-        raise ValueError("[pyzjr]:Target size is larger than the input image size")
+        raise ValueError("center_crop: Target size is larger than the input image size")
 
     x_start = (w - crop_width) // 2
     y_start = (h - crop_height) // 2
 
-    return base_crop2(image,x_start,y_start,crop_width,crop_height)
+    return crop_image_by_dimensions(image, (x_start, y_start), crop_width, crop_height)
 
 def five_crop(image, size):
     """
@@ -106,7 +125,7 @@ def five_crop(image, size):
 
     return crops    # central_crop, top_left_crop, top_right_crop, bottom_left_crop, bottom_right_crop
 
-def Stitcher_image(image_paths):
+def Stitcher_image(image_paths: list):
     """
     图像拼接，图片较小可能拼接失败
     :param image_paths: 由图片路径组成的列表
@@ -366,7 +385,7 @@ def random_resize_crop(image, target_size, scale_range=(1., 2.)):
 
     crop_x = random.randint(0, new_width - target_size[0])
     crop_y = random.randint(0, new_height - target_size[1])
-    cropped_image = base_crop2(resized_image, crop_x, crop_y, target_size[0], target_size[1])
+    cropped_image = crop_image_by_dimensions(resized_image, (crop_x, crop_y), target_size[0], target_size[1])
 
     return cropped_image
 
@@ -389,7 +408,7 @@ def random_crop(image, crop_size):
     start_x = random.randint(0, max_x)
     start_y = random.randint(0, max_y)
 
-    cropped_image = base_crop2(image, start_x, start_y, crop_size[0], crop_size[1])
+    cropped_image = crop_image_by_dimensions(image, (start_x, start_y), crop_size[0], crop_size[1])
 
     return cropped_image
 
@@ -535,3 +554,10 @@ class Retinex():
         img_msrcr = np.uint8(cv2.normalize(img_msrcr, None, 0, 255, cv2.NORM_MINMAX))
         return img_msrcr
 
+if __name__=="__main__":
+    import pyzjr
+    image_path = r"test.png"
+    img = pyzjr.imreader(image_path)
+    img = Centerzoom(img, 0.5)
+    print(pyzjr.improperties(img))
+    pyzjr.display("test", img)

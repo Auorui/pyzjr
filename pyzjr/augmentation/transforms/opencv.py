@@ -17,7 +17,7 @@ from pyzjr.augmentation.blur import (
     bilateralblur,
 )
 from pyzjr.core.error import _check_img_is_opencv
-from pyzjr.core.helpers import convert_to_tuple
+from pyzjr.core.helpers import to_2tuple
 from pyzjr.Math import rand
 
 __all__ = ["OpencvToTensor",
@@ -58,7 +58,7 @@ class OpencvToTensor():
 class OpencvResize():
     """OpencvResize类用于调整OpenCV图像的大小"""
     def __init__(self, size):
-        self.size = convert_to_tuple(size)
+        self.size = to_2tuple(size)
         self.interp_method = cv2.INTER_CUBIC
 
     def __call__(self, opencv_img):
@@ -73,7 +73,7 @@ class OpencvSquareResize():
     """OpencvSquareResize类用于将图像裁剪为正方形并调整大小"""
     def __init__(self, size):
         super().__init__()
-        self.h, self.w = convert_to_tuple(size)
+        self.h, self.w = to_2tuple(size)
 
     def __call__(self, opencv_img):  # im = np.array HWC
         _check_img_is_opencv(opencv_img)
@@ -196,7 +196,7 @@ class OpencvRandomBlur():
     def __call__(self, opencv_img):
         _check_img_is_opencv(opencv_img)
         if self.choice == "blur":
-            self.ksize = convert_to_tuple(self.ksize)
+            self.ksize = to_2tuple(self.ksize)
             opencv_img = meanblur(opencv_img, self.ksize)
         elif self.choice == "median":
             opencv_img = medianblur(opencv_img, self.ksize)
@@ -209,7 +209,7 @@ class OpencvRandomBlur():
 class OpencvCrop():
     """OpencvCrop类用于对图像进行随机裁剪"""
     def __init__(self, size):
-        self.size = convert_to_tuple(size)
+        self.size = to_2tuple(size)
 
     def __call__(self, opencv_img):
         _check_img_is_opencv(opencv_img)
@@ -222,7 +222,7 @@ class OpencvCrop():
 class OpencvResizeCrop():
     """OpencvResizeCrop类用于对图像进行随机缩放和裁剪"""
     def __init__(self, size, scale_range=(1.5, 2.5)):
-        self.size = convert_to_tuple(size)
+        self.size = to_2tuple(size)
         self.scale_range = scale_range
 
     def __call__(self, opencv_img):
@@ -233,7 +233,7 @@ class OpencvResizeCrop():
 class OpencvPadResize():
     """OpencvPadResize类用于调整OpenCV图像的大小并在背景中居中"""
     def __init__(self, size):
-        self.size = convert_to_tuple(size)
+        self.size = to_2tuple(size)
         self.full = (128, 128, 128)
 
     def __call__(self, opencv_img):
@@ -260,7 +260,7 @@ class OpencvGrayscale():
         return opencv_img
 
 if __name__=="__main__":
-    from pyzjr.augmentation.transforms._utils import Compose
+    from pyzjr.augmentation.transforms import Compose
     img = cv2.imread(r"D:\PythonProject\pyzjrPyPi\pyzjr\augmentation\test.png")
     transforms = Compose([
         OpencvCenterzoom(1.1),

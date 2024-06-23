@@ -107,6 +107,12 @@ def is_linux():
     if platform.system() == "Linux":
         return True
 
+def is_odd(n):
+    return n % 2 != 0
+
+def is_even(n):
+    return n % 2 == 0
+
 if __name__=="__main__":
     image_name = r'D:\PythonProject\pyzjrPyPi\pyzjr\augmentation\test.png'
     print(is_file(image_name), is_windows())

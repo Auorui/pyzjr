@@ -1,5 +1,6 @@
 import os
 import shutil
+from pyzjr.data.utils import timestr
 
 def cleanup_test_dir(test_dir):
     if os.path.exists(test_dir):
@@ -33,16 +34,28 @@ def unique_makedirs(root_path, *paths, inc=False):
         os.makedirs(outdir)
     return outdir
 
+def datatime_makedirs(root_path, *paths, use_simple_format=True):
+    """
+    创建含有独特时间的路径
+    """
+    time_path = timestr(use_simple_format)
+    outdir = os.path.join(root_path, time_path, *paths)
+    os.makedirs(outdir, exist_ok=True)
+
+
 if __name__=="__main__":
     root_path = 'test_output'
     subdir_name = 'test_subdir'
 
-    outdir1 = unique_makedirs(root_path, subdir_name)
-    print(f"Created directory: {outdir1}")
+    # outdir1 = unique_makedirs(root_path, subdir_name)
+    # print(f"Created directory: {outdir1}")
+    #
+    # outdir2 = unique_makedirs(root_path, subdir_name, inc=True)
+    # print(f"Created directory with inc: {outdir2}")
+    #
+    # outdir3 = unique_makedirs(root_path, subdir_name, inc=True)
+    # print(f"Created directory with inc (second time): {outdir3}")
+    # cleanup_test_dir(root_path)
 
-    outdir2 = unique_makedirs(root_path, subdir_name, inc=True)
-    print(f"Created directory with inc: {outdir2}")
-
-    outdir3 = unique_makedirs(root_path, subdir_name, inc=True)
-    print(f"Created directory with inc (second time): {outdir3}")
-    cleanup_test_dir(root_path)
+    datatime_makedirs(root_path, "loss")
+    datatime_makedirs(root_path, "weight")

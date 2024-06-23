@@ -3,7 +3,8 @@ from PIL import Image
 import random
 import numpy as np
 from tqdm import tqdm
-from pyzjr.data.basedataset import BaseDataset
+from pyzjr.core.helpers import to_2tuple
+from pyzjr.data.datasets.base import BaseDataset
 from pyzjr.nn.torchutils.OneHot import get_one_hot
 
 VOC_COLOR = [[0, 0, 0], [128, 0, 0], [0, 128, 0], [128, 128, 0],
@@ -90,6 +91,9 @@ class VOCSegmentation(BaseDataset):
     def __len__(self):
         return len(self.features)
 
+    def assert_list_length(self, image, label):
+        assert (len(image) == len(label)), r"The number of loaded images and labels does not match"
+
     def __getitem__(self, idx):
         image, label = self.features[idx], self.labels[idx]
         image, label = self.resizepadcenter(image, label, self.input_shape)
@@ -99,6 +103,30 @@ class VOCSegmentation(BaseDataset):
         label = voc_label2indices(label, self.color2label)
         one_hot_label = np.transpose(get_one_hot(label, num_classes=self.num_classes), (2, 0, 1))
         return image, label, one_hot_label
+
+    def resizepadcenter(self, image, label, input_shape):
+        """
+        将图像和标签粘贴到指定输入形状的中心位置。
+
+        :param image: 输入图像 (PIL.Image)
+        :param label: 输入标签图像 (PIL.Image)
+        :param input_shape: 目标输入形状 (tuple)，形如 (width, height)
+        :return: 调整后的图像和标签
+        """
+        input_shape = to_2tuple(input_shape)
+        h, w = input_shape
+        iw, ih = image.size
+        scale = min(w / iw, h / ih)
+        nw = int(iw * scale)
+        nh = int(ih * scale)
+        image = image.resize((nw, nh), Image.BICUBIC)
+        new_image = Image.new('RGB', (w, h), (128, 128, 128))
+        new_image.paste(image, ((w - nw) // 2, (h - nh) // 2))
+
+        label = label.resize((nw, nh), Image.NEAREST)
+        new_label = Image.new('RGB', (w, h), (0, 0, 0))
+        new_label.paste(label, ((w - nw) // 2, (h - nh) // 2))
+        return new_image, new_label
 
 def voc_annotation(trainval_percent=1, train_percent=0.9, VOCdevkit_path = 'VOCdevkit'):
     """
@@ -185,10 +213,10 @@ def voc_annotation(trainval_percent=1, train_percent=0.9, VOCdevkit_path = 'VOCd
 
 
 if __name__ == '__main__':
-    from pyzjr.augmentation.transforms.tvision import *
+    from pyzjr.augmentation.transforms import *
     data_path = r"D:\PythonProject\pytorch_segmentation_2D\MultiSegment\dataset\VOCdevkit"
 
-    transforms = ComposeWithLabel([
+    transforms = Compose2([
         RandomHorizontal_Flip(flip_prob=0.5),
         ToHSV(hue_range=(-0.1, 0.1), saturation_range=(0.6, 1.4), value_range=(0.7, 1.3)),
         ToTensor(),

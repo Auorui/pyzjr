@@ -44,8 +44,8 @@ https://www.writebug.com/code/ae41e81c-adef-11ee-830a-0242ac140019/#
 
 `0.0.12——0.0.16` Modifying bugs and adding functions to the PIC.py file.
 
-## Upload of Library
+## Note
+I have taken the postgraduate entrance examination, and if I can pass this year, I will continue to deepen my knowledge in this field
 
-* `python setup.py sdist`
 
-* `twine upload dist/*`
+
