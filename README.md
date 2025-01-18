@@ -23,26 +23,7 @@ https://github.com/Auorui/pyzjr (I want stars ⭐ hhh)
 https://www.writebug.com/code/ae41e81c-adef-11ee-830a-0242ac140019/#
 
 ## Update log
-`1.1.11` Significant changes have been made, including image augmentation, deep learning strategies, and the addition of 
-         my own way of reading images.
-
-`1.1.4` Added the dlearn section for deep learning. Currently, there are backbone networks, VOC dataset operations, 
-        and some training strategies available.(There is a problem that has been resolved in pyzjr==1.1.5)
-
-`1.1.2` Added basic open source feature extraction frameworks VGG, Resnet, Densenet.
-        In addition, the advanced visual module only adds gesture recognition and requires 
-        downloading the mediapipe. However, due to its complexity, there is no dependency added to pyzjr. 
-        If you want to use it, you need to download it separately
-
-`1.1.0` This update redefines the color module. Added some aspects of deep learning, such as vgg.
-
-`1.0.0` Official upload of version 1.0.0
-
-`0.0.19` Modified the problem of Escape character in the path read by the getPhotopath function
-
-`0.0.17——0.0.18` Added Showimage module and added torch framework. It is recommended to install it in a virtual environment of deep learning framework.
-
-`0.0.12——0.0.16` Modifying bugs and adding functions to the PIC.py file.
+`1.4.0` This will be a new version, which has removed many useless functions and reassigned each function appropriately.
 
 ## Note
 I have taken the postgraduate entrance examination, and if I can pass this year, I will continue to deepen my knowledge in this field
