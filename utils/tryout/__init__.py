@@ -1,0 +1,1 @@
+from .local_image import data_image_path
