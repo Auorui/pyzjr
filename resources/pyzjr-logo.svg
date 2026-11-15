@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">pyzjr logo</title>
+  <desc id="desc">A camera lens made from connected pixels beside the pyzjr wordmark.</desc>
+  <defs>
+    <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7c3aed"/>
+      <stop offset="0.52" stop-color="#2563eb"/>
+      <stop offset="1" stop-color="#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="core" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#172554"/>
+      <stop offset="1" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="word" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#1e1b4b"/>
+      <stop offset="1" stop-color="#0f766e"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#0f172a" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <g transform="translate(36 36)" filter="url(#shadow)">
+    <circle cx="144" cy="144" r="118" fill="#f8fafc" stroke="url(#ring)" stroke-width="14"/>
+    <circle cx="144" cy="144" r="83" fill="url(#core)"/>
+    <circle cx="144" cy="144" r="48" fill="url(#ring)" opacity="0.92"/>
+    <circle cx="128" cy="126" r="13" fill="#fff" opacity="0.9"/>
+    <path d="M70 75 50 55M218 75l20-20M70 213l-20 20M218 213l20 20" stroke="#38bdf8" stroke-width="9" stroke-linecap="round"/>
+    <circle cx="46" cy="51" r="9" fill="#f472b6"/>
+    <circle cx="242" cy="51" r="9" fill="#fbbf24"/>
+    <circle cx="46" cy="237" r="9" fill="#34d399"/>
+    <circle cx="242" cy="237" r="9" fill="#60a5fa"/>
+    <path d="M56 144h-29M261 144h-29" stroke="#a5b4fc" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="23" cy="144" r="8" fill="#a78bfa"/>
+    <circle cx="265" cy="144" r="8" fill="#22d3ee"/>
+  </g>
+
+  <g transform="translate(350 0)">
+    <text x="0" y="218" fill="url(#word)" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="148" font-weight="800" letter-spacing="-7">pyzjr</text>
+    <rect x="9" y="252" width="340" height="8" rx="4" fill="url(#ring)"/>
+    <text x="5" y="304" fill="#475569" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="25" font-weight="600" letter-spacing="5">COMPUTER VISION TOOLKIT</text>
+  </g>
+</svg>
